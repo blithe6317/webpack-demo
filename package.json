@@ -1,0 +1,30 @@
+{
+  "name": "webpack-demo",
+  "version": "1.0.0",
+  "description": "学习webpack 构建工具",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blithe6317/webpack-demo.git"
+  },
+  "author": "myzhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blithe6317/webpack-demo/issues"
+  },
+  "homepage": "https://github.com/blithe6317/webpack-demo#readme",
+  "devDependencies": {
+    "css-loader": "^4.2.1",
+    "file-loader": "^6.0.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "loadsh": "0.0.4"
+  }
+}
