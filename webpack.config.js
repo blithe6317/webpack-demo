@@ -2,71 +2,69 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-// module.exports = {
-//   mode: "development",
-//   entry: {
-//     index: "./src/index.js",
-//   },
-//   devtool: "inline-source-map",
-//   devServer: {
-//     contentBase: "./dist",
-//   },
-//   plugins: [
-//     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-//     new HtmlWebpackPlugin({ title: "Webpack 学习" }),
-//   ],
-//   output: {
-//     filename: "[name].[contenthash].js",
-//     // chunkFilename: "[name].bundle.js",
-//     path: path.resolve(__dirname, "dist"),
-//     // publicPath: "/",
-//   },
-//   module: {
-//     rules: [
-//       {
-//         test: /\.css$/,
-//         use: ["style-loader", "css-loader"],
-//       },
-//       {
-//         test: /\.(png|svg|jpg|gif)$/,
-//         use: ["file-loader"],
-//       },
-//     ],
-//   },
-// };
-
-/**
- * Caching
- */
-
 module.exports = {
   mode: "development",
-  entry: {
-    index: "./src/index.js",
-  },
   devtool: "inline-source-map",
-  devServer: {
-    contentBase: "./dist",
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({ title: "Webpack 学习" }),
-  ],
+  entry: "./src/index.js",
   output: {
-    filename: "[name].[contenthash].js",
-    path: path.resolve(__dirname, "dist"),
+    filename: "app.js",
+    path: path.resolve(__dirname, "build"),
+  },
+  devServer: {
+    port: 3000,
+    hot: true,
   },
   optimization: {
-    moduleIds: "hashed",
-    runtimeChunk: "single",
     splitChunks: {
+      chunks: "async",
+      minSize: 20000,
+      minRemainingSize: 0,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      automaticNameDelimiter: "~",
+      enforceSizeThreshold: 50000,
       cacheGroups: {
-        vendor: {
+        defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all",
+          priority: -10,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
         },
       },
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-object-rest-spread"],
+          },
+        },
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+    new CleanWebpackPlugin(),
+  ],
 };
